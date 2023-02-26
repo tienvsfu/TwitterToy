@@ -1,11 +1,15 @@
 import knexConfig from "../db/knexfile.js";
-import knex1 from "knex";
+import knex from "knex";
 
-const knex = knex1(knexConfig["development"]);
+const shard1 = knex(knexConfig["development"]);
+const shard2 = knex(knexConfig["production"]);
+
 var GLOBAL_ID = 1;
 
+const getIdCounter = () => {};
+
 const getUserById = (id) => {
-  return knex("users")
+  return shard1("users")
     .select({
       id: "id",
       name: "name",
@@ -21,7 +25,7 @@ const getUserById = (id) => {
 };
 
 const getAllUsers = () => {
-  return knex("users")
+  return shard1("users")
     .select({
       id: "id",
       name: "name",
@@ -36,14 +40,14 @@ const getAllUsers = () => {
 };
 
 const insertUser = ({ name }) => {
-  return knex("users")
+  return shard1("users")
     .insert({ id: GLOBAL_ID, name })
     .then((id) => {
       GLOBAL_ID += 1;
       console.log(id);
 
       //get user by id
-      return knex("users")
+      return shard1("users")
         .select({
           id: "id",
           name: "name",
