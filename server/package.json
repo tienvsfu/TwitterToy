@@ -5,12 +5,18 @@
   "main": "index.js",
   "scripts": {
     "migrate": "knex migrate:latest --knexfile db/knexfile.js",
+    "cleardb": "knex migrate:down --knexfile db/knexfile.js",
+    "seed": "knex seed:run --knexfile db/knexfile.js",
+    "seed_prod": "knex seed:run --knexfile db/knexfile.js --env production",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
+  "type": "module",
   "dependencies": {
+    "express": "^4.18.2",
     "knex": "^2.4.2",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "redis": "^4.6.5"
   }
 }
