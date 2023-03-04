@@ -4,14 +4,28 @@
  * @type { Object.<string, import("knex").Knex.Config> }
  */
 export default {
-  development: {
+  dev1: {
     client: "mysql",
     connection: {
       host: "127.0.0.1",
       port: 3306,
       user: "root",
       password: "bananana",
-      database: "banana",
+      database: "shard1",
+    },
+    migrations: {
+      tableName: "knex_migrations",
+    },
+  },
+
+  dev2: {
+    client: "mysql",
+    connection: {
+      host: "127.0.0.1",
+      port: 3306,
+      user: "root",
+      password: "bananana",
+      database: "shard2",
     },
     migrations: {
       tableName: "knex_migrations",

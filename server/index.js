@@ -1,7 +1,10 @@
 import express from "express";
 import bodyParser from "body-parser";
 import { createClient } from "redis";
-import { getUserById, getAllUsers, insertUser } from "./services/dbservice.js";
+import * as DbService from "./services/dbService.js/index.js";
+
+const { getUserById, getIdCounter, getAllUsers, insertUser } =
+  DbService.default;
 
 // setup redis
 const client = createClient();
@@ -19,6 +22,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // routing
+app.get("/hi", async (req, res) => {
+  const users = await getIdCounter();
+  res.json(users);
+});
+
 app.get("/users", async (req, res) => {
   const users = await getAllUsers();
   res.json(users);
@@ -31,9 +39,8 @@ app.post("/users", async (req, res) => {
     return res.json({ success: false, message: "Name is required" });
   }
 
-  const newGuy = await insertUser({ name });
-  console.log("NEW GUY IS");
-  console.log(newGuy);
+  const idCounter = await getIdCounter();
+  const newGuy = await insertUser({ id: `${idCounter + 1}`, name });
   res.json(newGuy);
 });
 
